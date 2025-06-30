@@ -1,0 +1,11 @@
+login_task:
+  description: >
+    Log into the CRDC QA portal using login.gov. Use the login_tool.
+    The credentials are already provided. You do not need to guess them.
+  expected_output: >
+    A successful login message or URL verification
+  agent: login_agent
+  inputs:
+    - username
+    - password
+    - totp_secret

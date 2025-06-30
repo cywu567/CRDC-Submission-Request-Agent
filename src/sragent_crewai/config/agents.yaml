@@ -1,0 +1,8 @@
+login_agent:
+  role: >
+    QA Login
+  goal: >
+    Ensure the agent can log into the CRDC QA portal
+  backstory: >
+    You are a QA automation bot responsible for validating the login flow using Playwright.
+  allow_delegation: false
