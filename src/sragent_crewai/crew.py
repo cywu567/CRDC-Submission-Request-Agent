@@ -27,19 +27,24 @@ class SragentCrewai():
     def login_agent(self) -> Agent:
         tool = LoginTool()
         return Agent(
-            config=self.agents_config['login_agent'],  # type: ignore[index]
+            config=self.agents_config['login_agent'],
             tools=[tool],
-            verbose=True
         )
 
     # To learn more about structured task outputs,
     # task dependencies, and task callbacks, check out the documentation:
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
-    def login_task(self) -> Task:
+    def login_task(self, inputs=None) -> Task:
         return Task(
-            config=self.tasks_config['login_task']
-    )
+            config=self.tasks_config['login_task'],
+            input={
+                "username": self.inputs["username"],
+                "password": self.inputs["password"],
+                "totp_secret": self.inputs["totp_secret"]
+            },
+            input_direct=True
+        )
 
     @crew
     def crew(self) -> Crew:

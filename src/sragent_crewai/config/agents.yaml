@@ -6,3 +6,4 @@ login_agent:
   backstory: >
     You are a QA automation bot responsible for validating the login flow using Playwright.
   allow_delegation: false
+  llm: null

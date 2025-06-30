@@ -15,3 +15,10 @@ def get_browser_session():
     _context = _browser.new_context()
     _page = _context.new_page()
     return _browser, _context, _page
+
+def get_page():
+    return get_browser_session()[2]
+
+def set_page(page):
+    global _page
+    _page = page

@@ -25,7 +25,9 @@ def run():
         "totp_secret": os.getenv("TOTP_SECRET")
     }
     try:
-        SragentCrewai().crew().kickoff(inputs=inputs)
+        crew_instance = SragentCrewai()
+        crew_instance.inputs = inputs
+        crew_instance.crew().kickoff(inputs=inputs)
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
@@ -92,5 +94,46 @@ def run_direct():
     )
     print("LoginTool result:", result)
 
+def run_navigate():
+    from dotenv import load_dotenv
+    from sragent_crewai.tools.login_tool import LoginTool
+    from sragent_crewai.tools.navigate_tool import NavigateTool
+    from sragent_crewai.tools.create_submission_tool import CreateSubmissionTool
+    from sragent_crewai.tools.smart_fill_form_tool import SmartFillFormTool
+
+    load_dotenv()
+
+    # Load credentials from .env
+    username = os.getenv("LOGIN_USERNAME")
+    password = os.getenv("LOGIN_PASSWORD")
+    totp_secret = os.getenv("TOTP_SECRET")
+
+    # Step 1: Login
+    login_tool = LoginTool()
+    login_result = login_tool.run(
+        username=username,
+        password=password,
+        totp_secret=totp_secret
+    )
+    print("LoginTool result:", login_result)
+
+    # Step 2: Navigate
+    destination = "submission request"
+    print(f"Navigating to destination: '{destination}'")
+    navigate_tool = NavigateTool()
+    navigate_result = navigate_tool.run(destination=destination)
+    print("NavigateTool result:", navigate_result)
+    
+    # Step 3: Create submission request
+    print("Creating submission request...")
+    create_tool = CreateSubmissionTool()
+    create_result = create_tool.run()
+    print("CreateSubmissionTool result:", create_result)
+    
+    print("Filling form with smart AI tool...")
+    fill_tool = SmartFillFormTool()
+    fill_result = fill_tool.run({"goal": "Fill out the submission request form with realistic test data"})
+    print("SmartFillFormTool result:", fill_result)
+
 if __name__ == "__main__":
-    run()
+    run_navigate()

@@ -5,7 +5,8 @@ login_task:
   expected_output: >
     A successful login message or URL verification
   agent: login_agent
-  inputs:
-    - username
-    - password
-    - totp_secret
+  input_direct: true
+  input:
+    username: "{username}"
+    password: "{password}"
+    totp_secret: "{totp_secret}"

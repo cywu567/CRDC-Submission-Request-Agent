@@ -2,12 +2,16 @@ from sragent_crewai.tools.bedrock_decision_tool import BedrockDecisionTool
 
 decision_tool = BedrockDecisionTool()
 
-def smart_click(page, goal: str):
+def smart_click(page, goal: str, filter_by_tag: str = None):
     print(f"[smart_click] Goal: {goal}")
 
     # Only consider <button> and <a> elements
     elements = []
-    for selector in ["button", "a", "input[type='submit']", "input[type='button']"]:
+    if filter_by_tag:
+        selectors = [filter_by_tag]
+    else:
+        selectors = ["button", "a", "input[type='submit']", "input[type='button']", "div[role='button']"]
+    for selector in selectors:
         elements += page.query_selector_all(selector)
 
     # Filter for visibility

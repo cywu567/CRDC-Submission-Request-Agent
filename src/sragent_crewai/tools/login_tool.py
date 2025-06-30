@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 from sragent_crewai.utils.smart_click import smart_click
 import pyotp
 import time
-from sragent_crewai.utils.session_manager import get_browser_session
+from sragent_crewai.utils.session_manager import get_page, set_page
 
 
 class LoginToolInput(BaseModel):
@@ -23,7 +23,7 @@ class LoginTool(BaseTool):
         print("  password:", '*' * len(password) if password else None)
         print("  totp_secret:", totp_secret[:4] + '...' if totp_secret else None)
         try:
-            browser, context, page = get_browser_session()
+            page = get_page()
             
             page.goto("https://hub-qa.datacommons.cancer.gov/")
             page.wait_for_load_state("networkidle")
@@ -48,8 +48,8 @@ class LoginTool(BaseTool):
             
             page.wait_for_load_state("networkidle")
             try:
-                time.sleep(10)
                 smart_click(page, "Grant access to share information with the NIH and complete the login process")
+                set_page(page)
             except:
                 pass
 

@@ -1,8 +1,9 @@
 from crewai.tools import BaseTool
 from typing import Type
 from pydantic import BaseModel, Field
-from sragent_crewai.utils.session_manager import get_browser_session
+from sragent_crewai.utils.session_manager import get_page, set_page
 from sragent_crewai.utils.smart_click import smart_click
+import time
 
 
 class NavigateToolInput(BaseModel):
@@ -21,25 +22,13 @@ class NavigateTool(BaseTool):
 
     def _run(self, destination: str) -> str:
         try:
-            _, _, page = get_browser_session()
+            page = get_page()
 
-            page.goto("https://hub-qa.datacommons.cancer.gov/")
-            page.wait_for_load_state("networkidle")
-
-            if "submission" in destination.lower():
-                smart_click(page, "Submission Requests")
-                smart_click(page, "Start a Submission Request")
-                try:
-                    smart_click(page, "I agree")
-                except:
-                    pass
-
-            elif "dashboard" in destination.lower():
-                smart_click(page, "Dashboard")
-
-            # Additional navigation logic can go here
-
-            return f"Navigated to: {page.url}"
+            # Use smart_click with the destination goal
+            result = smart_click(page, destination)
+            set_page(page)
+            return f"Navigation result: {result}\nFinal URL: {page.url}"
 
         except Exception as e:
             return f"NavigateTool error: {str(e)}"
+
