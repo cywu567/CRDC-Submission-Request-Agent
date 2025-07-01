@@ -15,8 +15,11 @@ class CreateSubmissionTool(BaseTool):
     def _run(self) -> str:
         try:
             page = get_page()
+            page.wait_for_timeout(1000)
             smart_click(page, "Go to Submission Requests tab", filter_by_tag="div[role='button']")
+            page.wait_for_timeout(1000)
             smart_click(page, "Start a Submission Request", filter_by_tag="button")
+            page.wait_for_timeout(1000)
             smart_click(page, "Read and Accept Terms")
             set_page(page)
 
