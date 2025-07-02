@@ -18,10 +18,6 @@ class LoginTool(BaseTool):
     args_schema: Type[BaseModel] = LoginToolInput
 
     def _run(self, username: str, password: str, totp_secret: str) -> str:
-        print("[LoginTool] Received inputs:")
-        print("  username:", username)
-        print("  password:", '*' * len(password) if password else None)
-        print("  totp_secret:", totp_secret[:4] + '...' if totp_secret else None)
         try:
             page = get_page()
             

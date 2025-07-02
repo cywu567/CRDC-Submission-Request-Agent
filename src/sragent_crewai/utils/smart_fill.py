@@ -19,36 +19,77 @@ def get_dropdown_options(page, label):
         pass
     return []
 
+def handle_dropdown(page, el, label_text, decision_tool):
+    try:
+        el.click()
+        page.wait_for_timeout(300)  # Let animation finish
+
+        # Wait for the dropdown menu to be present
+        page.wait_for_selector("[role='presentation'] [role='option']", timeout=3000)
+
+        options = page.query_selector_all("[role='presentation'] [role='option']")
+        options = [opt for opt in options if opt.is_visible()]
+        option_texts = [opt.inner_text().strip() for opt in options]
+
+        if not option_texts:
+            print(f"[handle_dropdown] No options found for {label_text}")
+            return False
+
+        # Let Bedrock pick the right option
+        chosen = decision_tool._run(
+            goal=f"Choose an option for '{label_text}'", options=option_texts
+        )
+
+        for opt in options:
+            text = opt.inner_text().strip()
+            if normalize(chosen) in normalize(text):
+                print(f"[handle_dropdown] Clicking option: {text}")
+                # Scroll into view and force click via JS
+                page.evaluate("""
+                    el => {
+                        el.scrollIntoView({ behavior: 'instant', block: 'center' });
+                        el.click();
+                    }
+                """, opt)
+                page.wait_for_timeout(300)
+                return True
+
+        print(f"[handle_dropdown] No matching option for '{chosen}' in {label_text}")
+    except Exception as e:
+        print(f"[handle_dropdown] Error handling dropdown '{label_text}': {e}")
+    return False
+
 #def handle_dropdown(page, el, label_text, decision_tool):
 #    try:
-#        el.click()
-#        page.wait_for_timeout(300)  # Let animation finish
-
-#        # Wait for the dropdown menu to be present
+#        # Open the dropdown
+#        page.evaluate("el => el.click()", el)
 #        page.wait_for_selector("[role='presentation'] [role='option']", timeout=3000)
 
+#        # Refresh option handles after opening the menu
 #        options = page.query_selector_all("[role='presentation'] [role='option']")
-#        options = [opt for opt in options if opt.is_visible()]
-#        option_texts = [opt.inner_text().strip() for opt in options]
+#        visible_options = [opt for opt in options if opt.is_visible()]
+#        option_texts = [opt.inner_text().strip() for opt in visible_options]
 
 #        if not option_texts:
 #            print(f"[handle_dropdown] No options found for {label_text}")
 #            return False
 
-#        # Let Bedrock pick the right option
+#        # Ask Bedrock to choose
 #        chosen = decision_tool._run(
 #            goal=f"Choose an option for '{label_text}'", options=option_texts
 #        )
 
-#        for opt in options:
+#        # Find and click matching option
+#        for opt in visible_options:
 #            text = opt.inner_text().strip()
 #            if normalize(chosen) in normalize(text):
-#                print(f"[handle_dropdown] Clicking option: {text}")
-#                # Scroll into view and force click via JS
+#                print(f"[handle_dropdown] Force-clicking option: {text}")
 #                page.evaluate("""
 #                    el => {
-#                        el.scrollIntoView({ behavior: 'instant', block: 'center' });
-#                        el.click();
+#                        el.scrollIntoView({ block: 'center', behavior: 'instant' });
+#                        el.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+#                        el.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
+#                        el.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 #                    }
 #                """, opt)
 #                page.wait_for_timeout(300)
@@ -58,46 +99,6 @@ def get_dropdown_options(page, label):
 #    except Exception as e:
 #        print(f"[handle_dropdown] Error handling dropdown '{label_text}': {e}")
 #    return False
-
-def handle_dropdown(page, el, label_text, decision_tool):
-    try:
-        # Open the dropdown
-        page.evaluate("el => el.click()", el)
-        page.wait_for_selector("[role='presentation'] [role='option']", timeout=3000)
-
-        # Refresh option handles after opening the menu
-        options = page.query_selector_all("[role='presentation'] [role='option']")
-        visible_options = [opt for opt in options if opt.is_visible()]
-        option_texts = [opt.inner_text().strip() for opt in visible_options]
-
-        if not option_texts:
-            print(f"[handle_dropdown] No options found for {label_text}")
-            return False
-
-        # Ask Bedrock to choose
-        chosen = decision_tool._run(
-            goal=f"Choose an option for '{label_text}'", options=option_texts
-        )
-
-        # Find and click matching option
-        for opt in visible_options:
-            text = opt.inner_text().strip()
-            if normalize(chosen) in normalize(text):
-                # Get coordinates and click precisely
-                box = opt.bounding_box()
-                if box:
-                    page.mouse.click(box['x'] + box['width']/2, box['y'] + box['height']/2)
-                    page.wait_for_timeout(300)
-                    return True
-                else:
-                    print(f"[handle_dropdown] Couldn't get bounding box for '{text}'")
-                    return False
-
-        print(f"[handle_dropdown] No matching option for '{chosen}' in {label_text}")
-    except Exception as e:
-        print(f"[handle_dropdown] Error handling dropdown '{label_text}': {e}")
-    return False
-
 
 
 
@@ -172,6 +173,7 @@ def smart_fill(page, goal: str = "Fill out the form as reasonably as possible"):
         f"- Label: {f['label']}\n  Tag: {f['tag']}\n  Name: {f['name']}\n  Options: {get_dropdown_options(page, f['label']) if f['kind'] == 'select' else 'N/A'}"
         for f in field_info
     ])
+
 
     prompt = f"""
     You are filling out a web form with the goal: "{goal}".

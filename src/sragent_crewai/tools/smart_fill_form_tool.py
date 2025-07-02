@@ -27,7 +27,7 @@ class SmartFillFormTool(BaseTool):
                 if next_button and next_button.is_enabled():
                     next_button.click()
                     print("[smart_fill_form] Clicked Next. Waiting for new section...")
-                    page.wait_for_timeout(1000)
+                    page.wait_for_selector("input, textarea, select, [role='button']", timeout=5000)
                 else:
                     print("[smart_fill_form] No Next button found or it is disabled.")
                     break

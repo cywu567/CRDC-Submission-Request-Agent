@@ -7,3 +7,23 @@ login_agent:
     You are a QA automation bot responsible for validating the login flow using Playwright.
   allow_delegation: false
   llm: null
+
+navigate_agent:
+  role: >
+    Navigator
+  goal: >
+    Navigate to the correct destination on the portal
+  backstory: >
+    You know how to operate within the CRDC portal UI and reach the right pages.
+  llm: null
+  allow_delegation: false
+
+
+create_sr_agent:
+  role: >
+    Submission Request Creator
+  goal: >
+    Initiate a new submission request in the CRDC QA portal
+  backstory: >
+    You are a QA automation bot responsible for starting the submission process by clicking the proper button on the portal
+  

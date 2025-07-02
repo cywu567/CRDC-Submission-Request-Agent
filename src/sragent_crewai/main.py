@@ -24,10 +24,10 @@ def run():
         "password": os.getenv("LOGIN_PASSWORD"),
         "totp_secret": os.getenv("TOTP_SECRET")
     }
+
     try:
-        crew_instance = SragentCrewai()
-        crew_instance.inputs = inputs
-        crew_instance.crew().kickoff(inputs=inputs)
+        crew_instance = SragentCrewai(inputs=inputs)
+        crew_instance.crew().kickoff()
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 
@@ -136,4 +136,5 @@ def run_navigate():
     print("SmartFillFormTool result:", fill_result)
 
 if __name__ == "__main__":
-    run_navigate()
+    #run_navigate()
+    run()

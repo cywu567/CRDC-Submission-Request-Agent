@@ -1,6 +1,8 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from sragent_crewai.tools.login_tool import LoginTool
+from sragent_crewai.tools.navigate_tool import NavigateTool
+from sragent_crewai.tools.create_submission_tool import CreateSubmissionTool
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 from dotenv import load_dotenv
@@ -17,6 +19,9 @@ class SragentCrewai():
     agents: List[BaseAgent]
     tasks: List[Task]
     
+    def __init__(self, inputs: dict):
+        self.inputs = inputs
+    
     # Learn more about YAML configuration files here:
     # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
     # Tasks: https://docs.crewai.com/concepts/tasks#yaml-configuration-recommended
@@ -25,10 +30,23 @@ class SragentCrewai():
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
     def login_agent(self) -> Agent:
-        tool = LoginTool()
         return Agent(
             config=self.agents_config['login_agent'],
-            tools=[tool],
+            tools=[LoginTool()],
+        )
+        
+    @agent
+    def navigate_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config['navigate_agent'],
+            tools=[NavigateTool()],
+        )
+        
+    @agent
+    def create_sr_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config['create_sr_agent'],
+            tools=[CreateSubmissionTool()],
         )
 
     # To learn more about structured task outputs,
@@ -37,21 +55,40 @@ class SragentCrewai():
     @task
     def login_task(self, inputs=None) -> Task:
         return Task(
-            config=self.tasks_config['login_task'],
+            description="Log into the CRDC QA portal using login.gov. Use the login_tool. Credentials are:\n"
+                f"Username: {self.inputs['username']}\n"
+                f"Password: {self.inputs['password']}\n"
+                f"TOTP Secret: {self.inputs['totp_secret']}",
+            expected_output="A successful login message or URL verification",
+            agent=self.login_agent(),
             input={
                 "username": self.inputs["username"],
                 "password": self.inputs["password"],
                 "totp_secret": self.inputs["totp_secret"]
             },
-            input_direct=True
+            input_direct=True,
+            args_schema=None
+        )
+        
+    @task
+    def navigate_task(self):
+        return Task(
+            config=self.tasks_config["navigate_task"],
+            agent=self.navigate_agent(),
+            input={"destination": "submission request"},
+            input_direct=True,
+        )
+        
+    @task
+    def create_submission_task(self):
+        return Task(
+            config=self.tasks_config["create_submission_task"],
+            agent=self.create_sr_agent(),
         )
 
     @crew
     def crew(self) -> Crew:
         """Creates the SragentCrewai crew"""
-        # To learn how to add knowledge sources to your crew, check out the documentation:
-        # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
-
         return Crew(
             agents=self.agents, # Automatically created by the @agent decorator
             tasks=self.tasks, # Automatically created by the @task decorator
