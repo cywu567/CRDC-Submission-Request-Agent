@@ -1,37 +1,28 @@
 ### **CRDC Datahub Submission Agent**
 
-This custom agent automates testing of the CRDC Datahub API's QA process by creating data submissions with metadata. It uses the 'CodeAgent' from the 'smolagents' library with specialized tools for each task. The agent runs on AWS Bedrock leveraging the Claude-Haiku model.
+This project develops a custom AI agent to automate the testing of the CRDC Datahub submission request form. Built with Python tools for synthetic data generation and intelligent browser automation, it validates form behavior across text inputs, dropdowns, and dynamic UI elements using Playwright and Faker.
+Designed for scalable execution on platforms like AWS Bedrock, the system supports remote, dependency-free operation. An integrated feedback loop logs form responses and system behaviors into a vector database, enabling the agent to learn from outcomes and improve over time. Agent orchestration is powered by CrewAI, allowing seamless task delegation and modular tool coordination.
+
 
 ## Setup
-1. **Create and activate a Python virtual environment:**
+1. **Activate the Python virtual environment:**
 
    ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source .venv/bin/activate
    ```
 
-2. **Install dependencies:**
+2. **Add Login Info to .env file**
+   TOTP_SECRET=YOUR_TOTP_SECRET
+   LOGIN_USERNAME=YOUR_LOGIN_USERNAME
+   LOGIN_PASSWORD=YOUR_LOGIN_PASSWORD
 
+3. **Install requirements**
    ```bash
-   pip install -r requirements.txt
+   pip install boto3 pyotp playwright
    ```
 
-3. **Export your submitter token manually in shell**
-
-    ```bash
-   export SUBMITTER_TOKEN = "your_submitter_api_token_here"
-   ```
-
-4. Adjust file paths in the code to match your local setup
-5. To run, cd into the main folder, and run
+4. To run, cd into the main folder, and run
 
 ```bash
-PYTHONPATH=src python src/sragent_crewai/main.py   
+PYTHONPATH=src python src/fedlead_agent_crewai/main.py   
 ```    
-
-## Usage
-Run CustomAgent.py to:
-
-- Generate unique submission names
-- Prepare and upload metadata files
-- Create and update submission batches
