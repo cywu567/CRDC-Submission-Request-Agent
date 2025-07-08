@@ -3,6 +3,7 @@ from crewai.project import CrewBase, agent, crew, task
 from sragent_crewai.tools.login_tool import LoginTool
 from sragent_crewai.tools.navigate_tool import NavigateTool
 from sragent_crewai.tools.create_submission_tool import CreateSubmissionTool
+from sragent_crewai.tools.smart_fill_form_tool import SmartFillFormTool
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 from dotenv import load_dotenv
@@ -48,6 +49,13 @@ class SragentCrewai():
             config=self.agents_config['create_sr_agent'],
             tools=[CreateSubmissionTool()],
         )
+        
+    @agent
+    def smart_fill_agent(self) -> Agent:
+        return Agent(
+            config=self.agents_config['smart_fill_agent'],
+            tools=[SmartFillFormTool()]
+        )
 
     # To learn more about structured task outputs,
     # task dependencies, and task callbacks, check out the documentation:
@@ -84,6 +92,13 @@ class SragentCrewai():
         return Task(
             config=self.tasks_config["create_submission_task"],
             agent=self.create_sr_agent(),
+        )
+        
+    @task
+    def smart_fill_task(self):
+        return Task(
+            config=self.tasks_config["smart_fill_task"],
+            agent=self.smart_fill_agent(),
         )
 
     @crew

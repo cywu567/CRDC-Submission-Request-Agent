@@ -26,6 +26,18 @@ def get_dropdown_options(page, label):
 
 def handle_dropdown(page, el, label_text, chosen):
     try:
+        page.evaluate("""
+        () => {
+        const openMenus = document.querySelectorAll('[role="presentation"]');
+        openMenus.forEach(m => m.remove());
+
+        const backdrops = document.querySelectorAll('.MuiBackdrop-root');
+        backdrops.forEach(b => b.remove());
+        }
+        """)
+        page.wait_for_timeout(200)
+
+
         el.click()
         page.wait_for_selector("[role='presentation'] [role='option']", timeout=3000)
         options = page.query_selector_all("[role='presentation'] [role='option']")

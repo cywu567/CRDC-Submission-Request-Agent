@@ -20,3 +20,12 @@ create_submission_task:
   expected_output: >
     A submission form page should be displayed.
   agent: create_sr_agent
+
+smart_fill_task:
+  description: >
+    Use the smart_fill_form tool to populate the current section of the submission request form with realistic values. 
+    Then click the Next button to proceed.
+  expected_output: >
+    A completed section of the submission request form.
+  agent: smart_fill_agent
+  tool: smart_fill_form

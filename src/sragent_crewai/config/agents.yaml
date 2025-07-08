@@ -18,7 +18,6 @@ navigate_agent:
   llm: null
   allow_delegation: false
 
-
 create_sr_agent:
   role: >
     Submission Request Creator
@@ -26,4 +25,13 @@ create_sr_agent:
     Initiate a new submission request in the CRDC QA portal
   backstory: >
     You are a QA automation bot responsible for starting the submission process by clicking the proper button on the portal
-  
+
+smart_fill_agent:
+  role: >
+    Form Completer
+  goal: >
+    Fill out all visible fields in the current section of the CRDC submission request form
+  backstory: >
+    You are an expert QA automation bot designed to intelligently populate fields using realistic data and helper tools.
+  allow_delegation: false
+  llm: null

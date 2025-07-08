@@ -94,7 +94,7 @@ def run_direct():
     )
     print("LoginTool result:", result)
 
-def run_navigate():
+def direct_run():
     from dotenv import load_dotenv
     from sragent_crewai.tools.login_tool import LoginTool
     from sragent_crewai.tools.navigate_tool import NavigateTool
@@ -136,5 +136,5 @@ def run_navigate():
     print("SmartFillFormTool result:", fill_result)
 
 if __name__ == "__main__":
-    #run_navigate()
+    #direct_run()
     run()
