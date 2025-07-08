@@ -26,5 +26,5 @@ Designed for scalable execution on platforms like AWS Bedrock, the system suppor
 4. To run, cd into the main folder, and run
 
 ```bash
-PYTHONPATH=src python src/fedlead_agent_crewai/main.py   
+PYTHONPATH=src python src/sragent_crewai/main.py   
 ```    
