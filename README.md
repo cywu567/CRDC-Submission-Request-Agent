@@ -12,9 +12,11 @@ Designed for scalable execution on platforms like AWS Bedrock, the system suppor
    ```
 
 2. **Add Login Info to .env file**
+'''
    TOTP_SECRET=YOUR_TOTP_SECRET
    LOGIN_USERNAME=YOUR_LOGIN_USERNAME
    LOGIN_PASSWORD=YOUR_LOGIN_PASSWORD
+'''
 
 3. **Install requirements**
    ```bash
