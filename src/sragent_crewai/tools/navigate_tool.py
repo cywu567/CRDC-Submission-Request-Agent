@@ -3,6 +3,7 @@ from typing import Type
 from pydantic import BaseModel, Field
 from sragent_crewai.utils.session_manager import get_page, set_page
 from sragent_crewai.utils.smart_click import smart_click
+from sragent_crewai.utils.log_utils import log_tool_execution
 import time
 
 
@@ -21,14 +22,33 @@ class NavigateTool(BaseTool):
     args_schema: Type[BaseModel] = NavigateToolInput
 
     def _run(self, destination: str) -> str:
+        input_data = {"destination": destination}
+
         try:
             page = get_page()
-
-            # Use smart_click with the destination goal
             result = smart_click(page, destination)
             set_page(page)
+
+            output = {
+                "click_result": result,
+                "final_url": page.url
+            }
+
+            log_tool_execution(
+                tool_name="navigate",
+                input_data=input_data,
+                output_data=output,
+                status="success"
+            )
+
             return f"Navigation result: {result}\nFinal URL: {page.url}"
 
         except Exception as e:
+            log_tool_execution(
+                tool_name="navigate",
+                input_data=input_data,
+                output_data=None,
+                status="error",
+                error_message=str(e)
+            )
             return f"NavigateTool error: {str(e)}"
-
