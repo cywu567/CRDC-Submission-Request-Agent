@@ -136,5 +136,5 @@ def direct_run():
     print("SmartFillFormTool result:", fill_result)
 
 if __name__ == "__main__":
-    #direct_run()
-    run()
+    direct_run()
+    #run()

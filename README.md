@@ -1,7 +1,7 @@
 ### **CRDC Datahub Submission Agent**
 
 This project develops a custom AI agent to automate the testing of the CRDC Datahub submission request form. Built with Python tools for synthetic data generation and intelligent browser automation, it validates form behavior across text inputs, dropdowns, and dynamic UI elements using Playwright and Faker.
-Designed for scalable execution on platforms like AWS Bedrock, the system supports remote, dependency-free operation. An integrated feedback loop logs form responses and system behaviors into a vector database, enabling the agent to learn from outcomes and improve over time. Agent orchestration is powered by CrewAI, allowing seamless task delegation and modular tool coordination.
+Designed for scalable execution on platforms like AWS Bedrock, the system supports remote, dependency-free operation. An integrated feedback loop logs form responses and system behaviors into DynamoDB, enabling the agent to learn from outcomes and improve over time. Agent orchestration is powered by CrewAI, allowing seamless task delegation and modular tool coordination.
 
 
 ## Setup

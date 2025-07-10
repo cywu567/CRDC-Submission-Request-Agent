@@ -1,3 +1,35 @@
+#login_task:
+#  description: >
+#    Log into the CRDC QA portal using login.gov. The credentials will be injected at runtime.
+#  expected_output: >
+#    A successful login message or URL verification
+#  agent: login_agent
+#  input_direct: true
+
+#navigate_task:
+#  description: >
+#    Navigate to the submission request part of the portal
+#  expected_output: >
+#    A successful navigation
+#  agent: navigate_agent
+#  input_direct: true
+
+#create_submission_task:
+#  description: >
+#    Click the button to start a new submission request on the portal.
+#  expected_output: >
+#    A submission form page should be displayed.
+#  agent: create_sr_agent
+
+#smart_fill_task:
+#  description: >
+#    Use the smart_fill_form tool to populate the current section of the submission request form with realistic values. 
+#    Then click the Next button to proceed.
+#  expected_output: >
+#    A completed section of the submission request form.
+#  agent: smart_fill_agent
+#  tool: smart_fill_form
+
 login_task:
   description: >
     Log into the CRDC QA portal using login.gov. The credentials will be injected at runtime.
@@ -21,11 +53,19 @@ create_submission_task:
     A submission form page should be displayed.
   agent: create_sr_agent
 
-smart_fill_task:
+smart_fill_section_task:
   description: >
-    Use the smart_fill_form tool to populate the current section of the submission request form with realistic values. 
-    Then click the Next button to proceed.
+    Use the SmartFillSectionTool to analyze and complete the currently visible fields on the page.
+    This should reflect metadata from a realistic lung cancer RNA study.
   expected_output: >
-    A completed section of the submission request form.
-  agent: smart_fill_agent
+    All visible fields are filled.
   tool: smart_fill_form
+  agent: smart_fill_agent
+
+click_next_task:
+  description: >
+    Click the 'Next' button on the form to proceed to the next section.
+  expected_output: >
+    The form should advance to a new section.
+  tool: click_next
+  agent: smart_fill_agent

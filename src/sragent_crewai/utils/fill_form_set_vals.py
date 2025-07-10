@@ -164,20 +164,20 @@ def check_radio_by_id(page, radio_id):
         
         
 def fill_rest_form(page):
-    fill_dropdown_by_label(page, "Program", "test star (TEST)")
+    #fill_dropdown_by_label(page, "Program", "test star (TEST)")
 
-    fill_field_by_label(page, "Study Title", "Lung Cancer RNA Study")
-    fill_field_by_label(page, "Study Abbreviation", "LCRS")
-    fill_field_by_label(page, "Study Description", "This study analyzes RNA data from lung cancer patients to identify biomarkers.")
+    #fill_field_by_label(page, "Study Title", "Lung Cancer RNA Study")
+    #fill_field_by_label(page, "Study Abbreviation", "LCRS")
+    #fill_field_by_label(page, "Study Description", "This study analyzes RNA data from lung cancer patients to identify biomarkers.")
 
-    fill_field_by_label(page, "Funding Agency/Organization", "National Cancer Institute (NCI)")
-    fill_field_by_label(page, "Grant or Contract Number(s)", "CA123456")
-    fill_field_by_label(page, "NCI Program Officer", "Dr. Jane Smith")
-    fill_field_by_label(page, "NCI Genomic Program Administrator", "Dr. Alan Brown")
+    #fill_field_by_label(page, "Funding Agency/Organization", "National Cancer Institute (NCI)")
+    #fill_field_by_label(page, "Grant or Contract Number(s)", "CA123456")
+    #fill_field_by_label(page, "NCI Program Officer", "Dr. Jane Smith")
+    #fill_field_by_label(page, "NCI Genomic Program Administrator", "Dr. Alan Brown")
     
-    next_button = page.query_selector("button:has-text('Next')")
-    next_button.click()
-    page.wait_for_timeout(1000)
+    #next_button = page.query_selector("button:has-text('Next')")
+    #next_button.click()
+    #page.wait_for_timeout(1000)
 
     check_checkbox_by_label(page, "Controlled Access")
     check_switch_by_label(page, "Has your study been registered in dbGaP?")
@@ -218,15 +218,15 @@ def fill_rest_form(page):
     fill_field_by_label(page, "Additional Comments or Information about this submission", "Test data only.")
 
 
-    save_button = page.query_selector("button:has-text('Save')")
-    save_button.click()
-    next_button = page.query_selector("button:has-text('Next')")
-    next_button.click()
-    page.wait_for_timeout(1000)
-    submit_button = page.query_selector("button:has-text('Submit')")
-    submit_button.click()
-    submit_button = page.query_selector("button:has-text('Confirm to Submit')")
-    submit_button.click()
+    #save_button = page.query_selector("button:has-text('Save')")
+    #save_button.click()
+    #next_button = page.query_selector("button:has-text('Next')")
+    #next_button.click()
+    #page.wait_for_timeout(1000)
+    #submit_button = page.query_selector("button:has-text('Submit')")
+    #submit_button.click()
+    #submit_button = page.query_selector("button:has-text('Confirm to Submit')")
+    #submit_button.click()
     
     
     
