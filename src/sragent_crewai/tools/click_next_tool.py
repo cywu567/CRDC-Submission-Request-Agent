@@ -23,20 +23,20 @@ class ClickNextTool(BaseTool):
                 if button.is_enabled():
                     button.click()
                     page.wait_for_timeout(1000)
-                    output = "Clicked the 'Next' button."
+                    return "Clicked the 'Next' button."
                 else:
-                    output = "'Next' button was found but disabled."
+                    msg = "'Next' button was found but disabled."
             else:
-                output = "No 'Next' button was found on the page."
+                msg = "No 'Next' button was found on the page."
 
+            # Only log if the button was missing or disabled
             log_tool_execution(
                 tool_name="click_next",
                 input_data=input_data,
-                output_data={"result": output},
-                status="success"
+                output_data={"result": msg},
+                status="partial_or_failed"
             )
-
-            return output
+            return msg
 
         except Exception as e:
             log_tool_execution(
@@ -47,3 +47,4 @@ class ClickNextTool(BaseTool):
                 error_message=str(e)
             )
             return f"ClickNextTool error: {str(e)}"
+

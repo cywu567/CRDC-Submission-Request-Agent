@@ -27,13 +27,6 @@ class SmartClickTool(BaseTool):
             page = get_page()
             clicked_text = smart_click(page, goal, filter_by_tag)
 
-            log_tool_execution(
-                tool_name="smart_click",
-                input_data=input_data,
-                output_data={"clicked": clicked_text},
-                status="success"
-            )
-
             return f"Successfully clicked: '{clicked_text}'"
 
         except Exception as e:

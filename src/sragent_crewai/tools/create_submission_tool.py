@@ -27,16 +27,7 @@ class CreateSubmissionTool(BaseTool):
             smart_click(page, "Read and Accept Terms")
             set_page(page)
 
-            output = f"Submission request started at URL: {page.url}"
-
-            log_tool_execution(
-                tool_name="create_submission",
-                input_data=input_data,
-                output_data={"url": page.url},
-                status="success"
-            )
-
-            return output
+            return f"Submission request started at URL: {page.url}"
 
         except Exception as e:
             log_tool_execution(

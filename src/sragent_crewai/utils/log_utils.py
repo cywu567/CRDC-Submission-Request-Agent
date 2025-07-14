@@ -23,7 +23,6 @@ def log_fill_section(tool, goal, section_number, fields_filled, status, table="S
 
 def log_tool_execution(tool_name, input_data, output_data, status="success", error_message=None, table="SR-Agent-ToolFormLogs"):
     try:
-        dynamodb = boto3.resource("dynamodb", region_name="us-east-2")
         table = dynamodb.Table(table)
         table.put_item(Item={
             "execution_id": str(uuid.uuid4()),

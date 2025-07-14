@@ -49,12 +49,6 @@ class LoginTool(BaseTool):
             except:
                 pass
 
-            log_tool_execution(
-                tool_name="login_tool",
-                input_data=input_data,
-                output_data={"message": "Login successful"},
-                status="success"
-            )
             return "Login successful"
 
         except Exception as e:

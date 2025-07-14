@@ -34,13 +34,6 @@ class NavigateTool(BaseTool):
                 "final_url": page.url
             }
 
-            log_tool_execution(
-                tool_name="navigate",
-                input_data=input_data,
-                output_data=output,
-                status="success"
-            )
-
             return f"Navigation result: {result}\nFinal URL: {page.url}"
 
         except Exception as e:
