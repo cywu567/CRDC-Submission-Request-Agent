@@ -20,7 +20,7 @@ class LoginTool(BaseTool):
     args_schema: Type[BaseModel] = LoginToolInput
 
     def _run(self, username: str, password: str, totp_secret: str) -> str:
-        input_data = {"username": username}  # Avoid logging password or TOTP
+        input_data = {"username": username}
 
         try:
             page = get_page()

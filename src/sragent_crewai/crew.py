@@ -121,7 +121,6 @@ from sragent_crewai.tools.navigate_tool import NavigateTool
 from sragent_crewai.tools.create_submission_tool import CreateSubmissionTool
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
-from dotenv import load_dotenv
 import os
 from sragent_crewai.tools.smart_fill_form_tool import SmartFillFormTool
 from sragent_crewai.tools.click_next_tool import ClickNextTool
@@ -220,6 +219,8 @@ class SragentCrewai():
         return Task(
             config=self.tasks_config["smart_fill_section_task"],
             agent=self.smart_fill_agent(),
+            #input={"goal": "Fill out the form as reasonably as possible"},
+            #input_direct=True,
         )
 
 

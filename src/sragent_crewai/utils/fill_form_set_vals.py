@@ -193,8 +193,8 @@ def fill_rest_form(page):
     next_button.click()
     page.wait_for_timeout(1000)
     
-    fill_field_by_label(page, "Targeted Data Submission Delivery Date", "07/15/2025")
-    fill_field_by_label(page, "Expected Publication Date", "08/01/2025")
+    fill_field_by_label(page, "Targeted Data Submission Delivery Date", "01/01/2026")
+    fill_field_by_label(page, "Expected Publication Date", "08/01/2026")
 
     #check_switch_by_label(page, "Clinical")
     check_switch_by_label(page, "Genomics")

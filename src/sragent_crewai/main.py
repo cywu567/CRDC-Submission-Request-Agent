@@ -5,7 +5,9 @@ import warnings
 from datetime import datetime
 
 from sragent_crewai.crew import SragentCrewai
+#from sragent_crewai.utils.env import load_env
 from dotenv import load_dotenv
+
 import os
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
@@ -18,7 +20,9 @@ def run():
     """
     Run the crew.
     """
-    load_dotenv()
+    env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.env"))
+    load_dotenv(dotenv_path=env_path, override=True)
+
     inputs = {
         "username": os.getenv("LOGIN_USERNAME"),
         "password": os.getenv("LOGIN_PASSWORD"),
@@ -27,9 +31,10 @@ def run():
 
     try:
         crew_instance = SragentCrewai(inputs=inputs)
-        crew_instance.crew().kickoff()
+        result = crew_instance.crew().kickoff()
+        return result or "Successfully ran sragent crew"
     except Exception as e:
-        raise Exception(f"An error occurred while running the crew: {e}")
+        return f"Error: {e}"
 
 
 def train():
@@ -72,27 +77,6 @@ def test():
         raise Exception(f"An error occurred while testing the crew: {e}")
 
 
-def run_direct():
-    from sragent_crewai.tools.login_tool import LoginTool
-    load_dotenv()
-    tool = LoginTool()
-
-    # Print inputs loaded from .env
-    username = os.getenv("LOGIN_USERNAME")
-    password = os.getenv("LOGIN_PASSWORD")
-    totp_secret = os.getenv("TOTP_SECRET")
-
-    print("Running LoginTool directly with:")
-    print("  username:", username)
-    print("  password:", '*' * len(password) if password else None)
-    print("  totp_secret:", totp_secret)
-
-    result = tool.run(
-        username=username,
-        password=password,
-        totp_secret=totp_secret
-    )
-    print("LoginTool result:", result)
 
 def direct_run():
     from dotenv import load_dotenv
@@ -100,9 +84,9 @@ def direct_run():
     from sragent_crewai.tools.navigate_tool import NavigateTool
     from sragent_crewai.tools.create_submission_tool import CreateSubmissionTool
     from sragent_crewai.tools.smart_fill_form_tool import SmartFillFormTool
-
+    
     load_dotenv()
-
+    
     # Load credentials from .env
     username = os.getenv("LOGIN_USERNAME")
     password = os.getenv("LOGIN_PASSWORD")
@@ -136,5 +120,4 @@ def direct_run():
     print("SmartFillFormTool result:", fill_result)
 
 if __name__ == "__main__":
-    direct_run()
-    #run()
+    run()

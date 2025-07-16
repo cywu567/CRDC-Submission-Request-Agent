@@ -76,10 +76,11 @@ from crewai.tools import BaseTool
 from typing import Type, List
 from pydantic import BaseModel, Field
 from sragent_crewai.utils.log_utils import log_tool_execution
+from sragent_crewai.utils.aws_client import get_bedrock_client
 import boto3
 import json
 
-bedrock = boto3.client("bedrock-runtime", region_name="us-east-1")
+bedrock = get_bedrock_client()
 
 class BedrockDecisionInput(BaseModel):
     goal: str = Field(..., description="What the agent is trying to do")
@@ -93,6 +94,8 @@ class BedrockDecisionTool(BaseTool):
     args_schema: Type[BaseModel] = BedrockDecisionInput
 
     def _run(self, goal: str, options: List[str], custom_prompt: str = "", max_tokens: int = 50) -> str:
+        bedrock = get_bedrock_client()
+
         input_data = {
             "goal": goal,
             "options": options,

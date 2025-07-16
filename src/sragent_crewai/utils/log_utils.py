@@ -1,8 +1,16 @@
 import boto3
 import uuid
 from datetime import datetime, timezone
+from dotenv import load_dotenv
+import os
 
-dynamodb = boto3.resource("dynamodb", region_name="us-east-2")
+load_dotenv(dotenv_path="/Users/celinewu/Desktop/ESI 2025/CRDC/CRDC-AI-Farm/sragent_crewai/.env.logging", override=True)
+dynamodb = boto3.resource(
+        "dynamodb",
+        region_name=os.getenv("AWS_REGION_NAME"),
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
+    )
 
 def log_fill_section(tool, goal, section_number, fields_filled, status, table="SR-Agent-FillFormLogs"):
     try:
