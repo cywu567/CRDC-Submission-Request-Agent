@@ -114,7 +114,7 @@
 #        )
 
 
-from crewai import Agent, Crew, Process, Task
+from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from sragent_crewai.tools.login_tool import LoginTool
 from sragent_crewai.tools.navigate_tool import NavigateTool
@@ -124,6 +124,7 @@ from typing import List
 import os
 from sragent_crewai.tools.smart_fill_form_tool import SmartFillFormTool
 from sragent_crewai.tools.click_next_tool import ClickNextTool
+
 
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
@@ -237,5 +238,6 @@ class SragentCrewai():
             ],
             process=Process.sequential,
             verbose=True,
+
         )
 

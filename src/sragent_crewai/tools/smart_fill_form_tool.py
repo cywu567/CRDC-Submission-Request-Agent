@@ -99,7 +99,6 @@ class SmartFillFormTool(BaseTool):
     args_schema: Type[BaseModel] = SmartFillFormToolInput
 
     def _run(self, goal: Optional[str] = None) -> str:
-        goal = goal or "Fill out the form as reasonably as possible"
         input_data = {"goal": goal}
         filled_sections = 0
         all_results = []

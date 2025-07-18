@@ -231,3 +231,197 @@ def fill_rest_form(page):
     
     
     
+#import re
+
+#def normalize(text):
+#    return re.sub(r'[^a-z0-9]', '', text.lower())
+
+#async def scrape_field_map(form):
+#    elements = await form.query_selector_all("input, textarea, select, div[role='button']")
+#    field_map = {}
+
+#    for el in elements:
+#        if not await el.is_visible():
+#            continue
+#        if await el.get_attribute("aria-hidden") == "true":
+#            continue
+#        if await el.get_attribute("tabindex") == "-1":
+#            continue
+
+#        el_id = await el.get_attribute("id")
+#        el_name = await el.get_attribute("name")
+#        el_placeholder = await el.get_attribute("placeholder")
+#        el_tag = (await el.evaluate("el => el.tagName")).lower()
+#        el_role = await el.get_attribute("role")
+#        is_dropdown = el_tag == "div" and el_role == "button" and await el.get_attribute("aria-haspopup") == "listbox"
+
+#        label_text = ""
+#        if el_id:
+#            label_el = await form.query_selector(f"label[for='{el_id}']")
+#            if label_el:
+#                label_text = (await label_el.inner_text()).strip()
+
+#        if not label_text:
+#            if el_name:
+#                label_text = el_name
+#            elif el_placeholder:
+#                label_text = el_placeholder
+#            elif el_id and not el_id.startswith(":r"):
+#                label_text = el_id
+#            else:
+#                continue
+
+#        norm_label = normalize(label_text)
+#        entry = (el, "select" if is_dropdown else "input")
+#        field_map.setdefault(norm_label, []).append(entry)
+
+#    return field_map
+
+
+#async def fill_field_by_label(page, label_text, value):
+#    try:
+#        forms = await page.query_selector_all("form")
+#        if not forms:
+#            print("[fill_field_by_label] No <form> found on page.")
+#            return
+#        form = forms[0]
+#        field_map = await scrape_field_map(form)
+#        norm_key = normalize(label_text)
+
+#        if norm_key in field_map:
+#            for el, kind in field_map[norm_key]:
+#                if kind == "input":
+#                    await el.fill(str(value))
+#                    return
+#        print(f"[fill_field_by_label] No input field matched label: {label_text}")
+#    except Exception as e:
+#        print(f"[fill_field_by_label] Error for label '{label_text}': {e}")
+
+
+
+#async def fill_dropdown_by_label(page, label_text, option_text):
+#    try:
+#        dropdown_button = await page.query_selector(
+#            f"text={label_text} >> xpath=.. >> xpath=.//*[contains(@role, 'button')]"
+#        )
+#        if not dropdown_button:
+#            dropdown_button = await page.query_selector(f"[role='button'][aria-label='{label_text}']")
+
+#        if not dropdown_button:
+#            print(f"[fill_dropdown_by_label] Dropdown not found for label: {label_text}")
+#            return
+
+#        await dropdown_button.click()
+#        await page.wait_for_timeout(300)
+
+#        await page.evaluate("""
+#            () => {
+#                const backdrops = document.querySelectorAll('.MuiBackdrop-root');
+#                for (const b of backdrops) {
+#                    b.style.setProperty('display', 'none', 'important');
+#                }
+#            }
+#        """)
+
+#        options = await page.query_selector_all("[role='presentation'] [role='option']")
+#        for opt in options:
+#            if (await opt.inner_text()).strip() == option_text:
+#                await opt.click()
+#                return
+
+#        print(f"[fill_dropdown_by_label] Option '{option_text}' not found for '{label_text}'")
+#    except Exception as e:
+#        print(f"[fill_dropdown_by_label] Error for label '{label_text}': {e}")
+
+#async def check_checkbox_by_label(page, label_text):
+#    try:
+#        forms = await page.query_selector_all("form")
+#        form = forms[0] if forms else None
+#        if not form:
+#            print("[check_checkbox_by_label] No form found.")
+#            return
+
+#        field_map = await scrape_field_map(form)
+#        norm_key = normalize(label_text)
+
+#        checkboxes = await form.query_selector_all("input[type='checkbox']")
+#        for el in checkboxes:
+#            container = await el.evaluate_handle("el => el.closest('div')")
+#            if container and normalize(await container.inner_text()) == norm_key:
+#                await el.check()
+#                return
+#        print(f"[check_checkbox_by_label] No checkbox matched label: {label_text}")
+#    except Exception as e:
+#        print(f"[check_checkbox_by_label] Error for '{label_text}': {e}")
+
+
+#async def check_switch_by_label(page, label_text):
+#    print("label_text", label_text)
+#    try:
+#        norm_target = normalize(label_text)
+#        label_els = await page.query_selector_all("label")
+
+#        for label_el in label_els:
+#            text = (await label_el.inner_text()).strip()
+#            if normalize(text) == norm_target:
+#                await label_el.click()
+#                print(f"[check_switch_by_label] Clicked label to toggle switch: {text}")
+#                return
+
+#        print(f"[check_switch_by_label] No matching <label> found for: {label_text}")
+#    except Exception as e:
+#        print(f"[check_switch_by_label] Error for label '{label_text}': {e}")
+
+
+
+#async def check_radio_by_id(page, radio_id):
+#    try:
+#        radio = await page.query_selector(f"input[type='radio']#{radio_id}")
+#        if radio:
+#            await radio.check()
+#            print(f"[check_radio_by_id] Checked radio with id: {radio_id}")
+#        else:
+#            print(f"[check_radio_by_id] No radio found with id: {radio_id}")
+#    except Exception as e:
+#        print(f"[check_radio_by_id] Error checking radio with id '{radio_id}': {e}")
+
+
+        
+        
+#async def fill_rest_form(page):
+#    await check_checkbox_by_label(page, "Controlled Access")
+#    await check_switch_by_label(page, "Has your study been registered in dbGaP?")
+#    await fill_field_by_label(page, "If yes, provide dbGaP PHS number with the version number", "phs002529.v1.p1")
+
+#    await fill_field_by_label(page, "Pre-Cancer types (provide all that apply)", "Atypical Hyperplasia")
+#    await fill_dropdown_by_label(page, "Species of subjects", "Homo sapiens")
+#    await fill_field_by_label(page, "Number of subjects included in the submission", "42")
+
+#    next_button = await page.query_selector("button:has-text('Next')")
+#    await next_button.click()
+#    await page.wait_for_timeout(1000)
+
+#    await fill_field_by_label(page, "Targeted Data Submission Delivery Date", "01/01/2026")
+#    await fill_field_by_label(page, "Expected Publication Date", "08/01/2026")
+
+#    await check_switch_by_label(page, "Genomics")
+#    await check_switch_by_label(page, "Proteomics")
+
+#    await fill_field_by_label(page, "Other Data Type(s)", "Epigenetics")
+
+#    file_inputs = await page.query_selector_all("tr input")
+#    if len(file_inputs) >= 4:
+#        await file_inputs[0].fill("FASTQ")
+#        await file_inputs[1].fill(".fq")
+#        await file_inputs[2].fill("10")
+#        await file_inputs[3].fill("50 GB")
+#    else:
+#        print("[file table] Could not find all 4 inputs for file row.")
+
+#    await check_radio_by_id(page, "section-d-data-de-identified-yes-radio-button")
+#    await check_checkbox_by_label(page, "Cell lines")
+#    await fill_field_by_label(page, "Additional Comments or Information about this submission", "Test data only.")
+    
+    
+    
+    

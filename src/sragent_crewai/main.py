@@ -20,9 +20,9 @@ def run():
     """
     Run the crew.
     """
-    env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.env"))
-    load_dotenv(dotenv_path=env_path, override=True)
-
+    #env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.env"))
+    #load_dotenv(dotenv_path="env_path", override=True)
+    load_dotenv(dotenv_path=".env", override=True)
     inputs = {
         "username": os.getenv("LOGIN_USERNAME"),
         "password": os.getenv("LOGIN_PASSWORD"),
@@ -32,8 +32,10 @@ def run():
     try:
         crew_instance = SragentCrewai(inputs=inputs)
         result = crew_instance.crew().kickoff()
+        print("success")
         return result or "Successfully ran sragent crew"
     except Exception as e:
+        print("error:", str(e))
         return f"Error: {e}"
 
 

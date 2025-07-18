@@ -3,8 +3,7 @@ from dotenv import load_dotenv
 import boto3
 import os
 
-def get_bedrock_client(env_path="/Users/celinewu/Desktop/ESI 2025/CRDC/CRDC-AI-Farm/sragent_crewai/.env"):
-    load_dotenv(dotenv_path=env_path, override=True)
+def get_bedrock_client():
     return boto3.client(
         "bedrock-runtime",
         aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),

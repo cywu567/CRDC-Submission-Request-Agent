@@ -51,3 +51,52 @@ def check_checkbox(el, should_check: bool):
     except Exception as e:
         print(f"[check_checkbox] Failed to set checkbox: {e}")
 
+#from sragent_crewai.utils.form_scraping import normalize
+
+#async def fill_text_field(el, value):
+#    try:
+#        if await el.is_disabled() or not await el.is_enabled():
+#            print(f"[fill_text_field] Skipping disabled input: {el}")
+#            return
+#        if await el.evaluate("el => el.readOnly || el.hasAttribute('readonly')"):
+#            print(f"[fill_text_field] Skipping readonly input: {el}")
+#            return
+#        await el.fill(str(value))
+#    except Exception as e:
+#        print(f"[fill_text_field] Error filling field: {e}")
+
+
+#async def handle_dropdown(page, el, label_text, chosen):
+#    try:
+#        await el.click()
+#        await page.wait_for_selector("[role='presentation'] [role='option']", timeout=3000)
+
+#        await page.evaluate("""
+#            () => {
+#                const backdrops = document.querySelectorAll('.MuiBackdrop-root');
+#                for (const b of backdrops) {
+#                    b.style.setProperty('display', 'none', 'important');
+#                }
+#            }
+#        """)
+
+#        options = await page.query_selector_all("[role='presentation'] [role='option']")
+#        for opt in options:
+#            text = (await opt.inner_text()).strip()
+#            if normalize(chosen) == normalize(text):
+#                print(f"[handle_dropdown] Selecting: {text}")
+#                await opt.click()
+#                return True
+
+#        print(f"[handle_dropdown] Option '{chosen}' not found for label '{label_text}'")
+#    except Exception as e:
+#        print(f"[handle_dropdown] Error for '{label_text}': {e}")
+#    return False
+
+
+#async def check_checkbox(el, should_check: bool):
+#    try:
+#        if should_check:
+#            await el.check()
+#    except Exception as e:
+#        print(f"[check_checkbox] Failed to set checkbox: {e}")

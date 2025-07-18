@@ -53,3 +53,64 @@ def smart_click(page, goal: str, filter_by_tag: str = None):
     
     except Exception as e:
         raise Exception(f"[smart_click] Failed to click: {e}")
+
+
+#from sragent_crewai.tools.bedrock_decision_tool import BedrockDecisionTool
+
+#decision_tool = BedrockDecisionTool()
+
+#async def smart_click(page, goal: str, filter_by_tag: str = None):
+#    print(f"[smart_click] Goal: {goal}")
+
+#    selectors = [filter_by_tag] if filter_by_tag else [
+#        "button", "a", "input[type='submit']", "input[type='button']", "div[role='button']"
+#    ]
+
+#    elements = []
+#    for selector in selectors:
+#        elements += await page.query_selector_all(selector)
+
+#    # Filter visible elements
+#    visible_elements = []
+#    for el in elements:
+#        try:
+#            if await el.is_visible():
+#                visible_elements.append(el)
+#        except Exception:
+#            continue
+
+#    options = []
+#    element_map = {}
+
+#    for el in visible_elements:
+#        try:
+#            text = (await el.inner_text()).strip()
+#            if not text:
+#                text = await el.get_attribute("value") or await el.text_content() or ""
+#            text = text.strip()
+#            if text:
+#                options.append(text)
+#                element_map[text.lower()] = el
+#        except Exception:
+#            continue
+
+#    if not options:
+#        raise Exception("No visible <button> or <a> elements with text found.")
+
+#    print("[smart_click] Visible options:", options)
+
+#    try:
+#        chosen = decision_tool._run(goal=goal, options=options).lower().strip('"').strip()
+#        print(f"[smart_click] LLM chose: {chosen}")
+
+#        for text, el in element_map.items():
+#            text_norm = text.lower().strip()
+#            if chosen in text_norm or text_norm in chosen:
+#                print(f"[smart_click] Clicking element with text: '{text}'")
+#                await el.click()
+#                return text
+
+#        raise Exception(f"No matching element found for LLM choice: '{chosen}'")
+    
+#    except Exception as e:
+#        raise Exception(f"[smart_click] Failed to click: {e}")

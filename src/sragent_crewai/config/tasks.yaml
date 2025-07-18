@@ -57,6 +57,7 @@ smart_fill_section_task:
   description: >
     Use the SmartFillSectionTool to analyze and complete the currently visible fields on the page.
     This should reflect metadata from a realistic lung cancer RNA study.
+    IMPORTANT: The 'goal' input to the smart_fill_form tool must be a plain string — do not wrap it in a dictionary like {'description': "..."}.
   expected_output: >
     All visible fields are filled.
   tool: smart_fill_form

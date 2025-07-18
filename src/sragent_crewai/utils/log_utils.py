@@ -4,7 +4,14 @@ from datetime import datetime, timezone
 from dotenv import load_dotenv
 import os
 
-load_dotenv(dotenv_path="/Users/celinewu/Desktop/ESI 2025/CRDC/CRDC-AI-Farm/sragent_crewai/.env.logging", override=True)
+#load_dotenv(dotenv_path="/Users/celinewu/Desktop/ESI 2025/CRDC/CRDC-AI-Farm/sragent_crewai/.env.logging", override=True)
+#dynamodb = boto3.resource(
+#        "dynamodb",
+#        region_name=os.getenv("AWS_REGION_NAME"),
+#        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+#        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
+#    )
+load_dotenv(dotenv_path=".env.logging", override=True)
 dynamodb = boto3.resource(
         "dynamodb",
         region_name=os.getenv("AWS_REGION_NAME"),
